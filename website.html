@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chandu | Portfolio</title>
+  <meta name="description" content="Portfolio of Chandu, a first-year Computer Science student at Scaler School of Technology.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>/* ---------- DESIGN TOKENS: change a color here and it changes everywhere ---------- */
+:root {
+  --bg: #ffffff;
+  --surface: #f6f7fb;
+  --text: #151a23;
+  --muted: #5d6675;
+  --line: #e4e7ee;
+  --accent: #2b45f0;
+  --accent-soft: #e9edff;
+
+  --font-head: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+
+  --radius: 16px;
+  --nav-height: 64px;
+}
+
+/* ---------- RESET + BASE ---------- */
+/* border-box: width includes padding + border (box model fix) */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-height); /* sticky nav won't cover section titles */
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-head);
+  line-height: 1.15;
+  margin: 0;
+}
+
+p { margin: 0; }
+ul { list-style: none; margin: 0; padding: 0; }
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- NAVBAR (position: sticky + Flexbox) ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;               /* keeps nav above all content */
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav {
+  max-width: 1100px;
+  margin: 0 auto;
+  height: var(--nav-height);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+.nav-links a:hover { color: var(--text); }
+
+.nav-links .nav-cta {
+  color: #fff;
+  background: var(--accent);
+  padding: 8px 18px;
+  border-radius: 999px;
+}
+.nav-links .nav-cta:hover { color: #fff; background: #1f33c4; }
+
+/* CSS-only hamburger: hidden checkbox + label */
+.menu-toggle { display: none; }
+.menu-button { display: none; }
+
+@media (max-width: 760px) {
+  .menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+  }
+
+  /* the three lines are one span + its pseudo-elements */
+  .menu-button span,
+  .menu-button span::before,
+  .menu-button span::after {
+    content: "";
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text);
+    position: relative;
+    transition: transform 0.25s ease, background 0.25s ease;
+  }
+  .menu-button span::before { position: absolute; top: -7px; }
+  .menu-button span::after  { position: absolute; top: 7px; }
+
+  /* checked = menu open: turn the lines into an X */
+  .menu-toggle:checked + .menu-button span { background: transparent; }
+  .menu-toggle:checked + .menu-button span::before { transform: translateY(7px) rotate(45deg); }
+  .menu-toggle:checked + .menu-button span::after  { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-links {
+    display: none;
+    position: absolute;       /* drops below the navbar */
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 8px 24px 20px;
+  }
+  .nav-links li a { display: block; padding: 12px 0; }
+  .nav-links .nav-cta { margin-top: 8px; text-align: center; }
+
+  .menu-toggle:checked ~ .nav-links { display: flex; }
+}
+
+/* ---------- SHARED LAYOUT ---------- */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 88px 24px 0;
+}
+
+.section > h2 {
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  margin-bottom: 36px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 13px 26px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid var(--accent);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #1f33c4; border-color: #1f33c4; transform: translateY(-3px); }
+.btn-outline { background: transparent; color: var(--accent); }
+.btn-outline:hover { background: var(--accent-soft); transform: translateY(-3px); }
+
+/* ---------- HERO (Flexbox split layout) ---------- */
+.hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 72px 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 56px;
+}
+
+.hero-text { flex: 1; }     /* text takes the leftover space */
+
+.hero-hello {
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.hero h1 {
+  font-size: clamp(2.3rem, 5.2vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 22px;
+}
+
+.hero-intro {
+  max-width: 52ch;
+  color: var(--muted);
+  font-size: 1.15rem;
+  margin-bottom: 32px;
+}
+
+.hero-buttons { display: flex; flex-wrap: wrap; gap: 14px; }
+
+/* Photo: arch shape + offset accent block behind it */
+.hero-photo {
+  position: relative;       /* anchor for the absolute badge */
+  flex: 0 0 auto;
+}
+
+.photo-frame {
+  position: relative;
+  width: 320px;
+  height: 400px;
+  border-radius: 160px 160px 24px 24px;   /* round top = arch */
+  background: var(--accent-soft);
+  overflow: hidden;
+  box-shadow: 14px 14px 0 var(--accent);
+  animation: rise 0.9s ease both;          /* page-load animation */
+}
+
+.photo-frame img {
+  position: absolute;
+  inset: 0;                  /* covers the whole frame */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;         /* crops instead of stretching */
+  object-position: center top;
+}
+
+/* Shown behind the photo until you add images/profile.jpg */
+.photo-initial {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  font-size: 9rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.badge {
+  position: absolute;
+  left: -28px;
+  bottom: 36px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(21, 26, 35, 0.1);
+  animation: float 4s ease-in-out infinite;  /* gentle floating loop */
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+@media (max-width: 860px) {
+  .hero {
+    flex-direction: column-reverse;   /* photo first on mobile */
+    align-items: flex-start;
+    padding-top: 40px;
+    gap: 44px;
+  }
+  .photo-frame { width: 260px; height: 330px; border-radius: 130px 130px 20px 20px; }
+  .badge { left: 150px; }
+}
+
+/* ---------- ABOUT (Grid: 2 columns -> 1 column) ---------- */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.about-lead {
+  font-family: var(--font-head);
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.about-more { display: grid; gap: 16px; color: var(--muted); }
+
+@media (max-width: 760px) {
+  .about-grid { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* ---------- SKILLS (Grid bento: cards span different columns) ---------- */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.skill-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.skill-card:hover { transform: translateY(-6px); border-color: var(--accent); }
+
+.skill-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
+.skill-card > p { color: var(--muted); margin-bottom: 16px; }
+.skill-card > h3 + .pills { margin-top: 16px; }
+
+.skill-web  { grid-column: span 2; }   /* wide card */
+.skill-wide { grid-column: span 3; }   /* full-width card */
+
+.pills { display: flex; flex-wrap: wrap; gap: 10px; }
+.pills li {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 860px) {
+  .skills-grid { grid-template-columns: 1fr 1fr; }
+  .skill-web, .skill-wide { grid-column: span 2; }
+}
+@media (max-width: 560px) {
+  .skills-grid { grid-template-columns: 1fr; }
+  .skill-web, .skill-wide { grid-column: span 1; }
+}
+
+/* ---------- PROJECTS (Grid: auto-fit makes it responsive by itself) ---------- */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 24px;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.project-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 36px rgba(21, 26, 35, 0.1);
+}
+
+/* Colored thumbnails (swap for screenshots later) */
+.project-thumb {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.project-thumb span {
+  font-family: var(--font-head);
+  font-size: 1.8rem;
+  font-weight: 800;
+  transition: transform 0.3s ease;
+}
+.project-card:hover .project-thumb span { transform: scale(1.1); }
+
+.thumb-1 { background: var(--accent-soft); color: var(--accent); }
+.thumb-2 { background: #fff1e3; color: #c2570c; }
+.thumb-3 { background: #e5f6ee; color: #12794a; }
+
+.project-body {
+  flex: 1;                       /* body fills card so links stick to the bottom */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+}
+.project-body h3 { font-size: 1.3rem; }
+.project-body > p { color: var(--muted); flex: 1; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tags li {
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 2px 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.project-links { display: flex; gap: 20px; font-weight: 600; }
+.project-links a { color: var(--accent); text-decoration: none; }
+.project-links a:hover { text-decoration: underline; }
+
+/* ---------- EDUCATION (timeline: border + pseudo-element dots) ---------- */
+.timeline {
+  border-left: 2px solid var(--line);
+  margin-left: 8px;
+  display: grid;
+  gap: 32px;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 32px;
+}
+.timeline-item::before {          /* the dot on the line */
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid #fff;
+}
+
+.timeline-item h3 { font-size: 1.25rem; }
+.timeline-place { font-weight: 500; }
+.timeline-date { color: var(--muted); font-size: 0.95rem; }
+
+/* ---------- CONTACT ---------- */
+.contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.contact-info h2 {
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  margin-bottom: 16px;
+}
+.contact-info > p { color: var(--muted); margin-bottom: 24px; }
+
+.contact-links { display: flex; flex-wrap: wrap; gap: 12px; }
+.contact-links a {
+  display: inline-block;
+  padding: 8px 20px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.contact-links a:hover { background: var(--accent-soft); border-color: var(--accent); }
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.contact-form label { font-weight: 600; font-size: 0.95rem; }
+.contact-form input,
+.contact-form textarea {
+  font: inherit;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  margin-bottom: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.contact-form textarea { resize: vertical; }
+.contact-form .btn { align-self: flex-start; margin-top: 6px; }
+
+@media (max-width: 760px) {
+  .contact { grid-template-columns: 1fr; gap: 32px; }
+}
+
+/* ---------- FOOTER ---------- */
+.site-footer {
+  margin: 96px auto 0;
+  border-top: 1px solid var(--line);
+  padding: 28px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  max-width: 1100px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Respect people who turn animations off */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto; }
+}</style>
+</head>
+<body>
+
+  <!-- NAVBAR (sticky, CSS-only mobile menu) -->
+  <header class="site-header">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="#hero">Chandu vanjangi</a>
+
+      <input type="checkbox" id="menu-toggle" class="menu-toggle">
+      <label for="menu-toggle" class="menu-button" aria-label="Toggle menu"><span></span></label>
+
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section id="hero" class="hero">
+      <div class="hero-text">
+        <p class="hero-hello">Hi, I'm Chandu vanjangi 👋</p>
+        <h1>First-year CS student, learning to build things that work.</h1>
+        <p class="hero-intro">
+          I'm from Vizag and studying at Scaler School of Technology.
+          I'm learning web development, DSA and problem solving, one project at a time.
+        </p>
+        <div class="hero-buttons">
+          <a href="#projects" class="btn btn-primary">View my work</a>
+          <!-- TODO: put your real GitHub username -->
+          <a href="https://github.com/YOUR-USERNAME" class="btn btn-outline" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+
+      <div class="hero-photo">
+        <div class="photo-frame">
+          <span class="photo-initial" aria-hidden="true">C</span>
+          <!-- Put your photo at images/profile.jpg -->
+          <img src="WhatsApp Image 2026-10-11 at 17.56.47 (2).jpeg" alt="">
+        </div>
+        <span class="badge">Based in bengaluru</span>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section">
+      <h2>About me</h2>
+      <div class="about-grid">
+        <p class="about-lead">
+          I'm Chandu, a first-year student at Scaler School of Technology.
+          I started coding recently, and I like learning by building.
+        </p>
+        <div class="about-more">
+          <p>
+            I enjoy maths and I'm willing to put in the hard work to get better every day.
+            Right now I'm learning DSA with C++ and Python, and building websites with HTML and CSS.
+          </p>
+          <p>
+            I want to join NlogN, the competitive programming club at SST,
+            and I'm interested in high-frequency trading as a career.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS (CSS Grid bento) -->
+    <section id="skills" class="section">
+      <h2>Skills</h2>
+      <div class="skills-grid">
+
+        <article class="skill-card skill-web">
+          <h3>Web</h3>
+          <p>What I used to build this site.</p>
+          <ul class="pills">
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Flexbox</li>
+            <li>CSS Grid</li>
+            <li>Responsive design</li>
+            <li>Animations</li>
+          </ul>
+        </article>
+
+        <article class="skill-card">
+          <h3>Strengths</h3>
+          <ul class="pills">
+            <li>Maths</li>
+            <li>Hard work</li>
+            <li>Consistency</li>
+          </ul>
+        </article>
+
+        <article class="skill-card">
+          <h3>Currently learning</h3>
+          <ul class="pills">
+            <li>C++</li>
+            <li>Python</li>
+            <li>DSA</li>
+          </ul>
+        </article>
+
+        <article class="skill-card skill-wide">
+          <h3>Next on my list</h3>
+          <p>JavaScript, Git and GitHub, and competitive programming.</p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <!-- TODO: replace projects 2 and 3 with your real course projects and links. -->
+    <section id="projects" class="section">
+      <h2>Projects</h2>
+      <div class="projects-grid">
+
+        <article class="project-card">
+          <div class="project-thumb thumb-1" aria-hidden="true">
+            <span>Portfolio</span>
+          </div>
+          <div class="project-body">
+            <h3>Personal Portfolio</h3>
+            <p>This website. A responsive, white-themed portfolio built with only HTML and CSS, including a CSS-only mobile menu.</p>
+            <ul class="tags"><li>HTML</li><li>CSS</li><li>Grid</li><li>Flexbox</li></ul>
+            <div class="project-links">
+              <a href="#hero">Live demo</a>
+              <a href="https://github.com/YOUR-USERNAME/portfolio" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-thumb thumb-2" aria-hidden="true">
+            <span>Flexbox</span>
+          </div>
+          <div class="project-body">
+            <h3>Flexbox Layout Practice</h3>
+            <p>A small interface built to practise alignment, spacing and the box model using Flexbox.</p>
+            <ul class="tags"><li>HTML</li><li>CSS</li><li>Flexbox</li></ul>
+            <div class="project-links">
+              <a href="https://github.com/YOUR-USERNAME/flexbox-practice" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-thumb thumb-3" aria-hidden="true">
+            <span>Animation</span>
+          </div>
+          <div class="project-body">
+            <h3>CSS Animation Experiment</h3>
+            <p>Animated components using transitions, transforms and keyframes, with no JavaScript.</p>
+            <ul class="tags"><li>CSS</li><li>Keyframes</li><li>Transitions</li></ul>
+            <div class="project-links">
+              <a href="https://github.com/YOUR-USERNAME/css-animations" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education" class="section">
+      <h2>Education</h2>
+      <div class="timeline">
+        <article class="timeline-item">
+          <h3> Artifical Intelligence Computer Science</h3>
+          <p class="timeline-place">Scaler School of Technology</p>
+          <h3>B.sc.honours at BITS PILANI</h3>
+         
+          <p class="timeline-date">1st year</p>
+        </article>
+        <article class="timeline-item">
+          <h3>Web Development course</h3>
+          <p class="timeline-place">HTML, CSS and responsive design</p>
+          <p class="timeline-date">Currently learning and building projects</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact">
+      <div class="contact-info">
+        <h2>Let's build something together.</h2>
+        <p>Have a question or want to collaborate? Send me a message.</p>
+        <ul class="contact-links">
+          <!-- TODO: replace with your real email, GitHub and LinkedIn -->
+          <li><a href="mailto:vanjangi.chandu18@gmail.com">Email</a></li>
+          <li><a href="https://github.com/chandu-vanjangi" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/vanjangi-chandu-4593a7421/" target="_blank" rel="noopener">LinkedIn</a></li>
+        </ul>
+      </div>
+
+      <!-- Front-end only form: opens the visitor's email app -->
+      <form class="contact-form" action="mailto:YOUR-EMAIL@example.com" method="post" enctype="text/plain">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <button type="submit" class="btn btn-primary">Send message</button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>© 2026 Chandu vanjangi</p>
+    <p>Built with HTML and CSS</p>
+  </footer>
+
+</body>
+</html>
